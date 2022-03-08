@@ -88,21 +88,21 @@ function createItems(cb) {
         function (callback) {
             itemCreate('Milk', 'Milk Description...', categories[0], 2.50, new Date(2022, 4, 1), callback);
         },
-        // function (callback) {
-        //     itemCreate('Chicken', 'Chicken Description...', categories[1], 8.47, new Date(2022, 7, 16), callback);
-        // },
-        // function (callback) {
-        //     itemCreate('Sour Patch', 'Sour Patch Description...', categories[2], 1.99, new Date(2025, 2, 23), callback);
-        // },
-        // function (callback) {
-        //     itemCreate('Coca-Cola', 'Coca-Cola Description...', categories[3], 9.99, new Date(2023, 11, 2), callback);
-        // },
-        // function (callback) {
-        //     itemCreate('Brownies', 'Brownies Description...', categories[4], 5.32, new Date(2022, 5, 20), callback);
-        // },
-        // function (callback) {
-        //     itemCreate('Carrots', 'Carrots Description...', categories[5], 1.50, new Date(2022, 3, 15), callback);
-        // },
+        function (callback) {
+            itemCreate('Chicken', 'Chicken Description...', categories[1], 8.47, new Date(2022, 7, 16), callback);
+        },
+        function (callback) {
+            itemCreate('Sour Patch', 'Sour Patch Description...', categories[2], 1.99, new Date(2025, 2, 23), callback);
+        },
+        function (callback) {
+            itemCreate('Coca-Cola', 'Coca-Cola Description...', categories[3], 9.99, new Date(2023, 11, 2), callback);
+        },
+        function (callback) {
+            itemCreate('Brownies', 'Brownies Description...', categories[4], 5.32, new Date(2022, 5, 20), callback);
+        },
+        function (callback) {
+            itemCreate('Carrots', 'Carrots Description...', categories[5], 1.50, new Date(2022, 3, 15), callback);
+        },
     ], cb);
 }
 
