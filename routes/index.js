@@ -13,6 +13,9 @@ router.get('/', function (req, res, next) {
 //view category list
 router.get('/categories', category_controller.view_categories);
 
+//view specific category
+router.get('/categories/:id', category_controller.view_category);
+
 //view item
 //router.get('/item/:id', item_controller.view_item);
 
