@@ -2,3 +2,8 @@ extends layout
 
 block content
   p=category.description
+
+  ul
+    each item in items_list
+      li 
+        a(href=item.url) #{item.name}

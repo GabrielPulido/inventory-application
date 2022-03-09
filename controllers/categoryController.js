@@ -12,10 +12,23 @@ exports.categories_list = function (req, res, next) {
     });
 }
 
-//
+//view specific category
 exports.view_category = function (req, res, next) {
-    Category.findById(req.params.id).exec(function (err, result) {
+    async.parallel({
+        category: function (callback) { Category.findById(req.params.id).exec(callback) },
+        items_list: function (callback) { Item.find({ 'category': req.params.id }).exec(callback) },
+    }, function (err, results) {
         if (err) { return next(err); }
-        res.render('view_category', { title: result.name, category: result });
+        if (results.category == null) {
+            var err = new Error('Category not found');
+            err.status = 404;
+            return next(err);
+        }
+        if (results.items_list == null) {
+            var err = new Error('Items not found');
+            err.status = 404;
+            return next(err);
+        }
+        res.render('view_category', { title: results.category.name, category: results.category, items_list: results.items_list });
     });
 }
