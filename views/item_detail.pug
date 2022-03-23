@@ -1,0 +1,7 @@
+extends layout 
+
+block content 
+  p Description: #{item.description}
+  p Category: #{item.category.name}
+  p Price: $#{item.roundedPrice}
+  p Expiration Date: #{item.formattedExpDate}
