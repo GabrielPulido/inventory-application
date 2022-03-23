@@ -13,6 +13,12 @@ router.get('/', function (req, res, next) {
 //view category list
 router.get('/categories', category_controller.categories_list);
 
+//get create category form
+router.get('/categories/create', category_controller.category_create_get);
+
+//submit create category form
+router.post('/categories/create', category_controller.category_create_post);
+
 //view specific category
 router.get('/categories/:id', category_controller.view_category);
 

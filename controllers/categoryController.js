@@ -32,3 +32,45 @@ exports.view_category = function (req, res, next) {
         res.render('view_category', { title: results.category.name, category: results.category, items_list: results.items_list });
     });
 }
+
+//get the create category form
+exports.category_create_get = async function (req, res, next) {
+    res.render('category_form', { title: 'Create New Category: ' });
+}
+
+//submit create category form
+exports.category_create_post = [
+    body('category_name').trim().isLength({ min: 1 }).escape().withMessage('Category name is required.'),
+    body('category_description', 'Invalid category description').optional({ checkFalsy: true }).escape(),
+
+    async function (req, res, next) {
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            res.render('category_form', { title: 'Create New Category: ', errors: errors.array() })
+        }
+
+        //format category name properly so that the first letter is uppercase and the rest is lowercase
+        // ie) dairy -> Dairy, MEAT->Meat, sNaCkS->Snacks, etc
+        let str = req.body.category_name.toLowerCase();
+        const formatted_category_name = str.charAt(0).toUpperCase() + str.slice(1);
+
+        let duplicate = await Category.findOne({ 'name': formatted_category_name });
+
+        //if there's a duplicate...
+        if (duplicate != null) {
+            res.render('category_form', { title: 'Create New Category: ', errors: [{ msg: 'Duplicate category. Please make a new category.' }] })
+        }
+        //if there isn't...
+        else {
+            let category = new Category(
+                {
+                    name: formatted_category_name,
+                    description: req.body.category_description,
+                });
+
+            await category.save();
+            res.redirect(category.url);
+        }
+    }
+];
