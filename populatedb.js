@@ -107,6 +107,7 @@ function createItems(cb) {
 }
 
 async.series([
+    createCategories,
     createItems
 ],
     // Optional callback
