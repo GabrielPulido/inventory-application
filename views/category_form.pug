@@ -4,10 +4,10 @@ block content
   form(method='POST', action='')
     div
       label(for='category_name') Name:
-      input#category_name(type='text' name='category_name')
+      input#category_name(type='text' name='category_name' required='true' value=(prevCategory===undefined ? '' : prevCategory.category_name))
     div 
       label(for='category_description') Description: 
-      input#category_description(type='text' name='category_description')
+      input#category_description(type='text' name='category_description' value=(prevCategory===undefined ? '' : prevCategory.category_description))
     div 
       button(type='submit') Submit
 

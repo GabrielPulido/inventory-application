@@ -3,6 +3,7 @@ var Category = require('../models/category');
 
 var async = require('async');
 const { body, validationResult } = require('express-validator');
+let utility = require('../utility');
 
 //categories_list
 exports.categories_list = function (req, res, next) {
@@ -38,7 +39,7 @@ exports.category_create_get = async function (req, res, next) {
     res.render('category_form', { title: 'Create New Category: ' });
 }
 
-//submit create category form
+//submit create category form 
 exports.category_create_post = [
     body('category_name').trim().isLength({ min: 1 }).escape().withMessage('Category name is required.'),
     body('category_description', 'Invalid category description').optional({ checkFalsy: true }).escape(),
@@ -47,13 +48,10 @@ exports.category_create_post = [
         const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
-            res.render('category_form', { title: 'Create New Category: ', errors: errors.array() })
+            res.render('category_form', { title: 'Create New Category: ', errors: errors.array(), prevCategory: req.body })
         }
 
-        //format category name properly so that the first letter is uppercase and the rest is lowercase
-        // ie) dairy -> Dairy, MEAT->Meat, sNaCkS->Snacks, etc
-        let str = req.body.category_name.toLowerCase();
-        const formatted_category_name = str.charAt(0).toUpperCase() + str.slice(1);
+        const formatted_category_name = utility.formatName(req.body.category_name);
 
         let duplicate = await Category.findOne({ 'name': formatted_category_name });
 
