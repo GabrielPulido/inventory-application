@@ -19,10 +19,24 @@ router.get('/categories/create', category_controller.category_create_get);
 //submit create category form
 router.post('/categories/create', category_controller.category_create_post);
 
+//get create item form
+router.get('/items/create', item_controller.item_create_get);
+
+//submit create item form
+router.post('/items/create', item_controller.item_create_post);
+
 //view specific category
 router.get('/categories/:id', category_controller.view_category);
 
 //view item
 router.get('/item/:id', item_controller.view_item);
+
+// //get category delete form
+// router.get('/categories/:id/delete', category_controller.category_delete_get);
+
+// //submit category delete form
+// router.post('/categories/:id/delete', category_controller.category_delete_post);
+
+
 
 module.exports = router;

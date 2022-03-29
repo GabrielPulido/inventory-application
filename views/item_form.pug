@@ -1,0 +1,28 @@
+extends layout 
+
+block content 
+  form(method='POST', action='')
+    div 
+      label(for="name") Item Name:  
+      input#name(type="text" name="name" required="true")
+    div 
+      label(for="description") Description:  
+      input#description(type="text" name="description")
+    div 
+      label(for="category") Category:  
+      select#category(name="category")
+        for category in categories
+          option(name=category.name value=category.name) #{category.name}
+    div 
+      label(for="price") Price:  
+      input#price(type="text" name="price" required="true")
+    div 
+      label(for="exp_date") Expiration Date:  
+      input#exp_date(type="date" name="exp_date")
+    div 
+      button(type="submit") Submit
+
+  if errors
+    ul
+      for error in errors
+        li!= error.msg

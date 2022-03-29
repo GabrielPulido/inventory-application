@@ -18,3 +18,44 @@ exports.view_item = function (req, res, next) {
             res.render('item_detail', { title: `Item: ${item.name}`, item: item });
         })
 }
+
+//get create item form
+exports.item_create_get = async function (req, res, next) {
+    let categories = await Category.find();
+    res.render('item_form.pug', { title: 'Create Item: ', categories: categories });
+}
+
+//submit create item form
+exports.item_create_post = [
+    body('name').trim().isLength({ min: 1 }).escape().withMessage('name is required').isAlphanumeric().withMessage('must be alphanumeric'),
+    body('description', 'Invalid description').trim().escape().optional({ checkFalsy: true }),
+    body('category', 'category must not be empty.').trim().isLength({ min: 1 }).escape(),
+    body('price').trim().escape().isLength({ min: 1 }).withMessage('price is required').isNumeric().withMessage('make sure price is numeric'),
+    body('exp_date', 'Invalid Exp Date').optional({ checkFalsy: true }).isISO8601().toDate(),
+
+    async function (req, res, next) {
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            let categories = await Category.find();
+            res.render('item_form.pug', { title: 'Create Item: ', categories: categories, errors: errors });
+        }
+
+        else {
+
+            let category = await Category.findOne({ name: req.body.category });
+            let item = new Item(
+                {
+                    name: req.body.name,
+                    description: req.body.description,
+                    category: category,
+                    price: req.body.price,
+                    expirationDate: req.body.exp_date
+                }
+            );
+
+            await item.save();
+            res.redirect(item.url);
+        }
+    }
+];

@@ -72,3 +72,9 @@ exports.category_create_post = [
         }
     }
 ];
+
+exports.category_delete_get = function (req, res, next) {
+
+}
+
+exports.category_delete_post = [];
