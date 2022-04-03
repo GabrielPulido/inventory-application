@@ -4,6 +4,7 @@ var Category = require('../models/category');
 var async = require('async');
 const { body, validationResult } = require('express-validator');
 let utility = require('../utility');
+const { findById } = require('../models/category');
 
 //categories_list
 exports.categories_list = function (req, res, next) {
@@ -73,8 +74,18 @@ exports.category_create_post = [
     }
 ];
 
-exports.category_delete_get = function (req, res, next) {
-
+exports.category_delete_get = async function (req, res, next) {
+    let category = await Category.findById(req.params.id);
+    res.render('category_delete', { title: `Delete Category: ${category.name}`, category: category });
 }
 
-exports.category_delete_post = [];
+/* 
+Note: even though category._id is the actual objectID and req.body.categoryid is the string form of the id, we can use both of them to find/delete specific items bc it's smart enough to find based on the string form or objectID form
+*/
+//User submits category delete form
+exports.category_delete_post = async function (req, res, next) {
+    const category = await Category.findById(req.body.categoryid);
+    await Item.deleteMany({ category: category._id });
+    await Category.findByIdAndRemove(req.body.categoryid);
+    res.redirect('/categories');
+};

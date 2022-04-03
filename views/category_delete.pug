@@ -1,0 +1,8 @@
+extends layout 
+
+block content 
+  p Are you sure you want to delete this category? Doing so will also delete all the items in it.
+  form(action="", method="post") 
+    input#categoryid(type='hidden',name='categoryid', required='true', value=category._id )
+    p
+      button(type="submit") Submit

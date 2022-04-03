@@ -31,11 +31,11 @@ router.get('/categories/:id', category_controller.view_category);
 //view item
 router.get('/item/:id', item_controller.view_item);
 
-// //get category delete form
-// router.get('/categories/:id/delete', category_controller.category_delete_get);
+//get category delete form
+router.get('/categories/:id/delete', category_controller.category_delete_get);
 
-// //submit category delete form
-// router.post('/categories/:id/delete', category_controller.category_delete_post);
+//submit category delete form
+router.post('/categories/:id/delete', category_controller.category_delete_post);
 
 
 
