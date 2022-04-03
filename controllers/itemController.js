@@ -59,3 +59,19 @@ exports.item_create_post = [
         }
     }
 ];
+
+//get item delete form
+exports.item_delete_get = async function (req, res, next) {
+    const item = await Item.findById(req.params.id);
+    res.render('item_delete.pug', { title: `Delete Item ${item.name}`, item: item });
+}
+
+
+//submit item delete form
+/*
+the findByIdAndDelete command returns the item you deleted from the database so I used that to make the header of the page
+*/
+exports.item_delete_post = async function (req, res, next) {
+    const item = await Item.findByIdAndDelete(req.body.itemid);
+    res.render('item_delete_confirmation.pug', { title: `${item.name} Successfully Deleted` });
+}

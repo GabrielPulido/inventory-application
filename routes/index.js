@@ -37,6 +37,10 @@ router.get('/categories/:id/delete', category_controller.category_delete_get);
 //submit category delete form
 router.post('/categories/:id/delete', category_controller.category_delete_post);
 
+//get item delete form
+router.get('/item/:id/delete', item_controller.item_delete_get);
 
+//submit item delete form
+router.post('/item/:id/delete', item_controller.item_delete_post);
 
 module.exports = router;

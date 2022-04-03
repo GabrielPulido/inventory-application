@@ -5,3 +5,6 @@ block content
   p Category: #{item.category.name}
   p Price: $#{item.roundedPrice}
   p Expiration Date: #{item.formattedExpDate}
+
+  p
+    a(href=item.url + '/delete')  Delete #{item.name}
