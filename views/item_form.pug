@@ -1,24 +1,29 @@
 extends layout 
 
+//- Whenever you render this form, pass all the categories into it so it can display them in the dropdown menu.
+//- Also pass in one item if you want the values to be prefilled
+
 block content 
   form(method='POST', action='')
     div 
       label(for="name") Item Name:  
-      input#name(type="text" name="name" required="true")
+      input#name(type="text" name="name" required="true" value=(undefined===item ? '' : item.name))
     div 
       label(for="description") Description:  
-      input#description(type="text" name="description")
+      input#description(type="text" name="description" value=(undefined===item ? '' : item.description))
     div 
       label(for="category") Category:  
       select#category(name="category")
         for category in categories
-          option(name=category.name value=category.name) #{category.name}
+          option(name=category.name value=category.name selected=(
+                category._id.toString()==item.category._id.toString()
+              ) ? 'selected' : false) #{category.name}
     div 
       label(for="price") Price:  
-      input#price(type="text" name="price" required="true")
+      input#price(type="text" name="price" required="true" value=(undefined===item ? '' : item.roundedPrice))
     div 
       label(for="exp_date") Expiration Date:  
-      input#exp_date(type="date" name="exp_date")
+      input#exp_date(type="date" name="exp_date" value=(undefined===item ? '' : item.exp_date_yyyy_mm_dd))
     div 
       button(type="submit") Submit
 

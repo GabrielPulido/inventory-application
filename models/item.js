@@ -31,6 +31,10 @@ ItemSchema
     .virtual('formattedExpDate')
     .get(function () {
         return DateTime.fromJSDate(this.expirationDate).toLocaleString(DateTime.DATE_MED);
-    })
+    });
+
+ItemSchema.virtual('exp_date_yyyy_mm_dd').get(function () {
+    return DateTime.fromJSDate(this.expirationDate).toISODate(); //format 'YYYY-MM-DD'
+});
 
 module.exports = mongoose.model('Item', ItemSchema);

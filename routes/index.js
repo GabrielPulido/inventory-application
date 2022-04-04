@@ -43,4 +43,10 @@ router.get('/item/:id/delete', item_controller.item_delete_get);
 //submit item delete form
 router.post('/item/:id/delete', item_controller.item_delete_post);
 
+//get item update form
+router.get('/item/:id/update', item_controller.item_update_get);
+
+//submit item update form
+router.post('/item/:id/update', item_controller.item_update_post);
+
 module.exports = router;

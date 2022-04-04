@@ -75,3 +75,47 @@ exports.item_delete_post = async function (req, res, next) {
     const item = await Item.findByIdAndDelete(req.body.itemid);
     res.render('item_delete_confirmation.pug', { title: `${item.name} Successfully Deleted` });
 }
+
+
+//get item update form
+exports.item_update_get = async function (req, res, next) {
+    const item = await Item.findById(req.params.id);
+    const categories = await Category.find();
+    res.render('item_form.pug', { title: `Update Item: ${item.name}`, item: item, categories: categories });
+}
+
+//submit item update form
+exports.item_update_post = [
+    body('name').trim().isLength({ min: 1 }).escape().withMessage('name is required'),
+    body('description', 'Invalid description').trim().escape().optional({ checkFalsy: true }),
+    body('category', 'category must not be empty.').trim().isLength({ min: 1 }).escape(),
+    body('price').trim().escape().isLength({ min: 1 }).withMessage('price is required').isNumeric().withMessage('make sure price is numeric'),
+    body('exp_date', 'Invalid Exp Date').optional({ checkFalsy: true }).isISO8601().toDate(),
+
+    async function (req, res, next) {
+        const errors = validationResult(req);
+        let oldItem = await Item.findById(req.params.id);
+
+        if (!errors.isEmpty()) {
+            let categories = await Category.find();
+            res.render('item_form.pug', { title: `Update Item: ${oldItem.name}`, item: oldItem, categories: categories, errors: errors.array() });
+        }
+        else {
+            const category = await Category.findOne({ name: req.body.category });
+            let item = new Item(
+                {
+                    name: req.body.name,
+                    description: req.body.description,
+                    category: category,
+                    price: req.body.price,
+                    expirationDate: req.body.exp_date,
+                    _id: req.params.id
+                }
+            );
+
+            await Item.findByIdAndUpdate(req.params.id, item);
+            res.redirect(item.url);
+        }
+
+    }
+];
