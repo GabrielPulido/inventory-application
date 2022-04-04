@@ -42,30 +42,32 @@ exports.category_create_get = async function (req, res, next) {
 
 //submit create category form 
 exports.category_create_post = [
-    body('category_name').trim().isLength({ min: 1 }).escape().withMessage('Category name is required.'),
-    body('category_description', 'Invalid category description').optional({ checkFalsy: true }).escape(),
+    body('name').trim().isLength({ min: 1 }).escape().withMessage('Category name is required.'),
+    body('description', 'Invalid category description').optional({ checkFalsy: true }).escape(),
 
     async function (req, res, next) {
         const errors = validationResult(req);
 
+        //passes in req.body as category which always has a .name and a .description
         if (!errors.isEmpty()) {
-            res.render('category_form', { title: 'Create New Category: ', errors: errors.array(), prevCategory: req.body })
+            res.render('category_form', { title: 'Create New Category: ', errors: errors.array(), category: req.body });
         }
 
-        const formatted_category_name = utility.formatName(req.body.category_name);
+        const formatted_category_name = utility.formatName(req.body.name);
 
         let duplicate = await Category.findOne({ 'name': formatted_category_name });
 
         //if there's a duplicate...
         if (duplicate != null) {
-            res.render('category_form', { title: 'Create New Category: ', errors: [{ msg: 'Duplicate category. Please make a new category.' }] })
+            const errors = [{ msg: 'Duplicate category. Please make a new category.' }];
+            res.render('category_form', { title: 'Create New Category: ', errors: errors });
         }
         //if there isn't...
         else {
             let category = new Category(
                 {
                     name: formatted_category_name,
-                    description: req.body.category_description,
+                    description: req.body.description,
                 });
 
             await category.save();
@@ -89,3 +91,35 @@ exports.category_delete_post = async function (req, res, next) {
     await Category.findByIdAndRemove(req.body.categoryid);
     res.redirect('/categories');
 };
+
+
+//get update category form
+exports.category_update_get = async function (req, res, next) {
+    const category = await Category.findById(req.params.id);
+    res.render('category_form', { title: `Update Category: ${category.name}`, category: category });
+}
+
+exports.category_update_post = [
+    body('name').trim().isLength({ min: 1 }).escape().withMessage('Category name is required.'),
+    body('description', 'Invalid category description').optional({ checkFalsy: true }).escape(),
+    async function (req, res, next) {
+        const errors = validationResult(req);
+        const category = await Category.findById(req.params.id);
+
+        //passes in req.body as category which always has a .name and a .description
+        if (!errors.isEmpty()) {
+            res.render('category_form', { title: 'Update Category: ' + category.name, errors: errors.array(), category: req.body });
+        }
+        else {
+            const updatedCategory = new Category(
+                {
+                    name: req.body.name,
+                    description: req.body.description,
+                    _id: req.params.id,
+                }
+            )
+            await Category.findByIdAndUpdate(req.params.id, updatedCategory);
+            res.redirect(category.url);
+        }
+    }
+]

@@ -49,4 +49,10 @@ router.get('/item/:id/update', item_controller.item_update_get);
 //submit item update form
 router.post('/item/:id/update', item_controller.item_update_post);
 
+//get update category form
+router.get('/categories/:id/update', category_controller.category_update_get);
+
+//submit update category form
+router.post('/categories/:id/update', category_controller.category_update_post);
+
 module.exports = router;
