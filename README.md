@@ -1,1 +1,1 @@
-This is my Inventory Application
+This is my Inventory Application: https://warm-garden-06492.herokuapp.com/categories/create
