@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var compression = require('compression');
 var helmet = require('helmet');
+require("dotenv").config();
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -13,9 +14,9 @@ var app = express();
 
 //Set up mongoose connection
 var mongoose = require('mongoose');
+
 // Set up mongoose connection
-var dev_db_url = 'mongodb+srv://gabep:ia-admin@cluster0.itbj1.mongodb.net/inventory-app?retryWrites=true&w=majority';
-var mongoDB = process.env.MONGODB_URI || dev_db_url;
+var mongoDB = process.env.MONGODB_URI;
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
