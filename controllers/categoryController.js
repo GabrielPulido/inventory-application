@@ -60,7 +60,7 @@ exports.category_create_post = [
         //if there's a duplicate...
         if (duplicate != null) {
             const errors = [{ msg: 'Duplicate category. Please make a new category.' }];
-            res.render('category_form', { title: 'Create New Category: ', errors: errors });
+            res.render('category_form', { title: 'Create New Category: ', errors: errors.array() });
         }
         //if there isn't...
         else {

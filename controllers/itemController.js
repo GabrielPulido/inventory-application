@@ -22,12 +22,18 @@ exports.view_item = function (req, res, next) {
 //get create item form
 exports.item_create_get = async function (req, res, next) {
     let categories = await Category.find();
-    res.render('item_form.pug', { title: 'Create Item: ', categories: categories });
+
+    //create blank item
+    let blankItem = {}
+    blankItem.category = {};
+    blankItem.category._id = '';
+
+    res.render('item_form.pug', { title: 'Create Item: ', categories: categories, item: blankItem });
 }
 
 //submit create item form
 exports.item_create_post = [
-    body('name').trim().isLength({ min: 1 }).escape().withMessage('name is required').isAlphanumeric().withMessage('must be alphanumeric'),
+    body('name').trim().isLength({ min: 1 }).escape().withMessage('name is required'),
     body('description', 'Invalid description').trim().escape().optional({ checkFalsy: true }),
     body('category', 'category must not be empty.').trim().isLength({ min: 1 }).escape(),
     body('price').trim().escape().isLength({ min: 1 }).withMessage('price is required').isNumeric().withMessage('make sure price is numeric'),
@@ -38,7 +44,11 @@ exports.item_create_post = [
 
         if (!errors.isEmpty()) {
             let categories = await Category.find();
-            res.render('item_form.pug', { title: 'Create Item: ', categories: categories, errors: errors });
+            //create blank item
+            let blankItem = {}
+            blankItem.category = {};
+            blankItem.category._id = '';
+            res.render('item_form.pug', { title: 'Create Item: ', categories: categories, errors: errors.array(), item: blankItem });
         }
 
         else {
